@@ -1,10 +1,5 @@
-FROM bref/php-85:3
-
-COPY composer.json composer.lock /var/task/
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
-
-COPY . /var/task
-RUN composer dump-autoload --optimize --no-dev
+# Build stage: install dependencies and optimize Laravel
+FROM composer:2 AS build
 
 # Static environment variables for Laravel
 ENV LOG_CHANNEL=stack
@@ -56,6 +51,20 @@ ENV AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
 
 ENV SQS_PREFIX=${SQS_PREFIX}
 ENV SQS_QUEUE=${SQS_QUEUE}
+
+WORKDIR /app
+
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+
+COPY . .
+RUN composer dump-autoload --optimize --no-dev \
+    && php artisan optimize
+
+# Runtime stage
+FROM bref/php-85:3
+
+COPY --from=build /app /var/task
 
 # The handler that processes Laravel queue jobs from SQS
 CMD ["Bref\\LaravelBridge\\Queue\\QueueHandler"]
