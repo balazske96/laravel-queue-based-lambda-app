@@ -11,6 +11,8 @@
     "require": {
         "php": "^8.3",
         "aws/aws-sdk-php": "^3.376",
+        "bref/bref": "^3.0",
+        "bref/laravel-bridge": "^3.0",
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0"
     },
