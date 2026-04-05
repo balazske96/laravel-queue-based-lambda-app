@@ -14,7 +14,6 @@ ENV SESSION_PATH=/
 ENV SESSION_DOMAIN=null
 ENV QUEUE_CONNECTION=sqs
 ENV CACHE_STORE=file
-ENV BREF_RUNTIME=function
 
 # Dynamic args
 ARG APP_NAME="AWS Functions with Laravel"
@@ -63,6 +62,8 @@ RUN composer dump-autoload --optimize --no-dev \
 
 # Runtime stage
 FROM bref/php-85:3
+
+ENV BREF_RUNTIME=function
 
 COPY --from=build /app /var/task
 
