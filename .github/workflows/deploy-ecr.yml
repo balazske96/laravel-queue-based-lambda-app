@@ -40,5 +40,5 @@ jobs:
             SQS_PREFIX=${{ env.SQS_PREFIX }}
             SQS_QUEUE=${{ env.SQS_QUEUE }}
           tags: |
-            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{github.run_number}}
             ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:latest
